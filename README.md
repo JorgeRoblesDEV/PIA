@@ -1,2 +1,3 @@
-# PIA
-Repositorio de grupo
+# PIA - Programación de Inteligencia Artificial
+
+- Hackhaton Python
