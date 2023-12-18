@@ -6,7 +6,7 @@ import termios
 def move_player(self):
     while True:
         try:
-            movement = self.getch().lower()
+            movement = getch(self).lower()
 
             if movement == 'q':
                 print("\n\nGracias por haber jugado a Dungeon Crawl. Vuelve pronto.")

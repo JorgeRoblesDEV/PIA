@@ -4,9 +4,8 @@ gi.require_version('Gtk', '3.0')
 from VentanaGrid import VentanaGrid
 from gi.repository import Gtk
 
-
-if __name__ == "__main__":
-    ventana = VentanaGrid(tamanio_texto = 100)
+def main():
+    ventana = VentanaGrid(tamanio_texto=100)
 
     ventana.set_position(Gtk.WindowPosition.CENTER)
 
@@ -16,6 +15,9 @@ if __name__ == "__main__":
 
     # Iniciar el bucle principal de Gtk para manejar eventos y actualizar la interfaz de usuario
     Gtk.main()
+
+if __name__ == "__main__":
+    main()
 
 
 # Crear los botones y el grid a Mano

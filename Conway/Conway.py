@@ -2,7 +2,7 @@ import random
 import os
 import time
 
-class GameOfLife:
+class GameOfLife():
     DEFAULT_CELL_WIDTH = 10
     DEFAULT_CELL_HEIGHT = 10
     DEFAULT_INIT_ALIVE_CELLS_NUM = 20
