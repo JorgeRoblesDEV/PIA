@@ -123,10 +123,12 @@ class MapGrid():
     def move_player(self):
         # Windows
         if os.name == 'nt':
-            pass
+            from Move_payer_windows import move_player
+            move_player(self)
         # Linux
         elif os.name == 'posix':
-            pass
+            from Move_player_linux import move_player
+            move_player(self)
         else:
             print("Sistema operativo no compatible")
 
