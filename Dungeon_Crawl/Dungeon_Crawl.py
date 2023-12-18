@@ -104,22 +104,6 @@ class MapGrid():
                     if self.player.coor_x == 0 and self.player.coor_y == 0:
                         self.mapa[y][x] = '■'
 
-
-    # def generate_map_with_solution(self, pct = 0.3):
-    #     while True:
-    #         # Agregar paredes aleatorias
-    #         self.get_walls(pct = pct)
-    #
-    #         # Verificar si las paredes bloquean completamente el camino desde x hasta o
-    #         if not self.win_is_possible():
-    #             # Si están bloqueadas, reiniciar la generación del mapa
-    #             clear_screen()
-    #             print("Generando un nuevo mapa...")
-    #             continue
-    #
-    #         # Si no están bloqueadas, salir del bucle y continuar con el juego
-    #         break
-
     def move_player(self):
         # Windows
         if os.name == 'nt':
