@@ -1,13 +1,6 @@
 import random as rand
-import sys
 
-# WINDOWS
-# import msvcrt
-
-# LINUX
-import sys
-import tty
-import termios
+import os
 
 
 def clear_screen():
@@ -111,38 +104,6 @@ class MapGrid():
                     if self.player.coor_x == 0 and self.player.coor_y == 0:
                         self.mapa[y][x] = '■'
 
-    # WINDOWS
-    # def move_player(self):
-    #     while True:
-    #         try:
-    #             if msvcrt.kbhit():
-    #                 movement = msvcrt.getch().decode().lower()
-    #                 if movement == 'q':
-    #                     print("\n\nGracias por haber jugado a Dungeon Crawl. Vuelve pronto.")
-    #                     sys.exit()
-    #                 elif movement == 'r':
-    #                     # Reiniciar el juego
-    #                     self.reset_game()
-    #                 else:
-    #                     clear_screen()
-    #                     # Poner '.' a la ubicación del jugador antes de mover
-    #                     self.move_player_previous()
-    #                     # Mover jugador
-    #                     self.player.coor_x, self.player.coor_y = self.player.move(movement, self.mapa)
-    #                     self.draw_player()
-    #
-    #                     # Verificar si el jugador ha ganado
-    #                     if self.player.coor_x == self.ancho_mapa - 1 and self.player.coor_y == self.alto_mapa - 1:
-    #                         print("\n\n¡Felicidades! Has ganado la partida.")
-    #                         # Preguntar si desea jugar otra partida
-    #                         if self.play_again():
-    #                             # Reiniciar el juego
-    #                             self.reset_game()
-    #                         else:
-    #                             sys.exit()
-    #         # La excepción salta cuando se introduce un caracter No utf-8
-    #         except UnicodeDecodeError:
-    #             print("", end="")
 
     # def generate_map_with_solution(self, pct = 0.3):
     #     while True:
@@ -159,49 +120,16 @@ class MapGrid():
     #         # Si no están bloqueadas, salir del bucle y continuar con el juego
     #         break
 
-    # LINUX
     def move_player(self):
-        while True:
-            try:
-                movement = self.getch().lower()
+        # Windows
+        if os.name == 'nt':
+            pass
+        # Linux
+        elif os.name == 'posix':
+            pass
+        else:
+            print("Sistema operativo no compatible")
 
-                if movement == 'q':
-                    print("\n\nGracias por haber jugado a Dungeon Crawl. Vuelve pronto.")
-                    sys.exit()
-                elif movement == 'r':
-                    # Reiniciar el juego
-                    self.reset_game()
-                else:
-                    clear_screen()
-                    # Poner '.' a la ubicación del jugador antes de mover
-                    self.move_player_previous()
-                    # Mover jugador
-                    self.player.coor_x, self.player.coor_y = self.player.move(movement, self.mapa)
-                    self.draw_player()
-
-                    # Verificar si el jugador ha ganado
-                    if self.player.coor_x == self.ancho_mapa - 1 and self.player.coor_y == self.alto_mapa - 1:
-                        print("\n\n¡Felicidades! Has ganado la partida.")
-                        # Preguntar si desea jugar otra partida
-                        if self.play_again():
-                            # Reiniciar el juego
-                            self.reset_game()
-                        else:
-                            sys.exit()
-
-            except UnicodeDecodeError:
-                print("", end="")
-    # LINUX
-    def getch(self):
-        # Lee una sola tecla sin necesidad de presionar Enter
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-        try:
-            tty.setraw(sys.stdin.fileno())
-            char = sys.stdin.read(1)
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-        return char
 
     # def generate_map_with_solution(self, pct = 0.3):
     #     while True:
