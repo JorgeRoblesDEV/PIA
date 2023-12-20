@@ -1,7 +1,7 @@
 import TIC_TAC_TOE.Main as tic
 import Dungeon_Crawl.Main as dc
 import Conway.Main as con
-class Juegos():
+class Game():
     def __init__(self):
         abc = 3
 

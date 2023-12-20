@@ -32,15 +32,15 @@ class GameOfLife():
 
     def llenar_con_celdas_muertas(self):
         for i in range(self.height):
-            row = []
+            fila = []
             for j in range(self.width):
-                row.append(self.DEAD)
-            self.grid.append(row)
+                fila.append(self.DEAD)
+            self.grid.append(fila)
 
     def draw_grid(self):
-        for row in self.grid:
-            for cell in row:
-                print(cell, end=' ')
+        for fila in self.grid:
+            for elemento in fila:
+                print(elemento, end=' ')
             print()
         print()
 
@@ -54,16 +54,18 @@ class GameOfLife():
                     break
             i += 1
 
-    def get_cell_living_neighbors(self, x, y):
-        living_neighbors = 0
-        for dy in [-1, 0, 1]:
-            for dx in [-1, 0, 1]:
-                if dx == 0 and dy == 0:
+    def get_cell_living_neighbors(self, x_celda, y_celda):
+        cantidad_vecinos_vivos = 0
+        for desplazamiento_y in [-1, 0, 1]:
+            for desplazamiento_x in [-1, 0, 1]:
+                if desplazamiento_x == 0 and desplazamiento_y == 0:
                     continue
-                nx, ny = x + dx, y + dy
-                if 0 <= nx < self.width and 0 <= ny < self.height and self.grid[ny][nx] == self.ALIVE:
-                    living_neighbors += 1
-        return living_neighbors
+                x_vecino, y_vecino = x_celda + desplazamiento_x, y_celda + desplazamiento_y
+                if 0 <= x_vecino < self.width and 0 <= y_vecino < self.height and self.grid[y_vecino][
+                    x_vecino] == self.ALIVE:
+                    cantidad_vecinos_vivos += 1
+
+        return cantidad_vecinos_vivos
 
     def next_turn_grid(self):
         next_grid = []
@@ -89,11 +91,11 @@ class GameOfLife():
     def init_game(self):
         self.set_init_alive_cells()
 
-        turn = 1
-        while turn <= self.game_turns:
+        turno = 1
+        while turno <= self.game_turns:
             self.clear()
-            print('Turno:' + str(turn))
+            print('Turno:' + str(turno))
             self.draw_grid()
             self.next_turn_grid()
             self.wait()
-            turn += 1
+            turno += 1

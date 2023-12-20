@@ -7,12 +7,12 @@ def clear_screen():
     print('\n' * 100)
 
 class MapGrid():
-    def __init__(self, ancho = 30, alto = 15):
+    def __init__(self, ancho = 30, alto = 15, avatar = '@'):
         clear_screen()
 
         self.ancho_mapa = ancho
         self.alto_mapa = alto
-        self.player = Player(avatar='@')
+        self.player = Player(avatar=avatar)
         self.mapa = []
         self.paredes = []
         self.get_grid()
