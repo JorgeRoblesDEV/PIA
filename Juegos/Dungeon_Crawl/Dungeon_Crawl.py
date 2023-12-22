@@ -18,20 +18,32 @@ class MapGrid():
         config_arr = config['DEFAULT']
         if 'Width' in config_arr:
             self.ancho_mapa = int(config_arr['Width'])
+        else:
+            self.ancho_mapa = ancho
         if 'Height' in config_arr:
             self.alto_mapa = int(config_arr['Height'])
+        else:
+            self.alto_mapa = alto
         if 'Avatar' in config_arr:
             self.player = Player(avatar=config_arr['Avatar'])
+        else:
+            self.player = Player(avatar=avatar_player)
         if 'Spaces' in config_arr:
             if config_arr['Spaces'] == 'ASCII(32)':
                 self.espacios_char = ' '
             else:
                 self.espacios_char = config_arr['Spaces']
+        else:
+            self.espacios_char = espacios_char
         if 'Walls' in config_arr:
             self.paredes_char = config_arr['Walls']
+        else:
+            self.paredes_char = paredes_char
         if 'Start_End' in config_arr:
             self.start_end = config_arr['Start_End']
-            self.get_grid()
+        else:
+            self.start_end = inicio_fin_char
+        self.get_grid()
         clear_screen()
 
         self.get_walls(0.3)

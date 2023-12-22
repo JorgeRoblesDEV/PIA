@@ -2,6 +2,8 @@ import random
 import os
 import time
 
+import configparser
+
 class GameOfLife():
     DEFAULT_CELL_WIDTH = 10
     DEFAULT_CELL_HEIGHT = 10
@@ -12,11 +14,31 @@ class GameOfLife():
     DEAD = '.'
 
     def __init__(self, width=None, height=None, init_alive_cells_num=None, game_turns=None, sleep_time=None):
-        self.width = width or self.DEFAULT_CELL_WIDTH
-        self.height = height or self.DEFAULT_CELL_HEIGHT
-        self.init_alive_cells_num = init_alive_cells_num or self.DEFAULT_INIT_ALIVE_CELLS_NUM
-        self.game_turns = game_turns or self.DEFAULT_GAME_TURNS
-        self.sleep_time = sleep_time or self.DEFAULT_SLEEP_TIME
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        config_arr = config['DEFAULT']
+        if 'Width' in config_arr:
+            self.width = int(config_arr['Width'])
+        else:
+            self.width = width or self.DEFAULT_CELL_WIDTH
+        if 'Height' in config_arr:
+            self.height = int(config_arr['Height'])
+        else:
+            self.height = height or self.DEFAULT_CELL_HEIGHT
+        if 'Init_alive_cells_num' in config_arr:
+            self.init_alive_cells_num = int(config_arr['Init_alive_cells_num'])
+        else:
+            self.init_alive_cells_num = init_alive_cells_num or self.DEFAULT_INIT_ALIVE_CELLS_NUM
+        if 'Game_turns' in config_arr:
+            self.game_turns = int(config_arr['Game_turns'])
+        else:
+            self.game_turns = game_turns or self.DEFAULT_GAME_TURNS
+
+        if 'Sleep_time' in config_arr:
+            self.sleep_time = float(config_arr['Sleep_time'])
+        else:
+            self.sleep_time = sleep_time or self.DEFAULT_SLEEP_TIME
+
         self.grid = []
         self.llenar_con_celdas_muertas()
         self.set_init_alive_cells()
