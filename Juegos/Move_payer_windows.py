@@ -1,7 +1,6 @@
-from Dungeon_Crawl import clear_screen
-
 import msvcrt
 import sys
+
 
 def move_player(self):
     while True:
@@ -15,7 +14,7 @@ def move_player(self):
                     # Reiniciar el juego
                     self.reset_game()
                 else:
-                    clear_screen()
+                    self.clear_screen()
                     # Poner '.' a la ubicación del jugador antes de mover
                     self.move_player_previous()
                     # Mover jugador

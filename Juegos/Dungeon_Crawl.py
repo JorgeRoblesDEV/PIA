@@ -4,18 +4,18 @@ import os
 
 import configparser
 
+from Game import Game
 
-def clear_screen():
-    print('\n' * 100)
 
-class MapGrid():
-    def __init__(self, ancho = 30, alto = 15, avatar_player = '@', espacios_char = '.', paredes_char = '#', inicio_fin_char = '■'):
+class MapGrid(Game):
+    def __init__(self, ancho=30, alto=15, avatar_player='@', espacios_char='.', paredes_char='#', inicio_fin_char='■'):
+        super().__init__()
         self.inicio_fin_char = inicio_fin_char
         self.mapa = []
         self.paredes = []
         config = configparser.ConfigParser()
         config.read('config.ini')
-        config_arr = config['DEFAULT']
+        config_arr = config['DUNGEON']
         if 'Width' in config_arr:
             self.ancho_mapa = int(config_arr['Width'])
         else:
@@ -44,7 +44,7 @@ class MapGrid():
         else:
             self.start_end = inicio_fin_char
         self.get_grid()
-        clear_screen()
+        self.clear_screen()
 
         self.get_walls(0.3)
         self.move_player()
@@ -82,12 +82,12 @@ class MapGrid():
         print("└───────" + borde + borde + "──────┘", end='', flush=True)
 
     # Crea las coordenadas de las paredes
-    def get_walls(self, pct = 0.3):
+    def get_walls(self, pct=0.3):
         num_paredes = round(self.ancho_mapa * self.alto_mapa * pct // 2)
 
         for i in range(0, num_paredes):
-            coord_x = rand.randint(0, self.ancho_mapa -1)
-            coord_y = rand.randint(0, self.alto_mapa -1)
+            coord_x = rand.randint(0, self.ancho_mapa - 1)
+            coord_y = rand.randint(0, self.alto_mapa - 1)
             n_coord = [coord_y, coord_x]
 
             # Si existe la pared o es la misma que la casilla de finalizar -> Se repite el random
@@ -126,7 +126,7 @@ class MapGrid():
               espacios + "│  A S D   Q:Salir  │\n" +
               espacios + "└───────────────────┘", flush=True)
 
-    def modify_player(self, elemento = None):
+    def modify_player(self, elemento=None):
         if elemento == None:
             elemento = self.player.avatar
         for y in range(self.alto_mapa):
@@ -172,14 +172,14 @@ class MapGrid():
         self.player.coor_y = 0
         self.get_grid()
 
-        clear_screen()
+        self.clear_screen()
         # Volver a crear las paredes
         self.get_walls(0.3)
         self.move_player()
 
 
 class Player():
-    def __init__(self, avatar = 'P'):
+    def __init__(self, avatar='P'):
         self.avatar = avatar
         self.coor_x = 0
         self.coor_y = 0
@@ -205,6 +205,5 @@ class Player():
         return self.coor_x, self.coor_y
 
 
-
-
-
+def main_dungeon():
+    MapGrid(30, 15, paredes_char='#', espacios_char='.')

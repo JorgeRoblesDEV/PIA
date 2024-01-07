@@ -4,7 +4,10 @@ import time
 
 import configparser
 
-class GameOfLife():
+from Game import Game
+
+
+class GameOfLife(Game):
     DEFAULT_CELL_WIDTH = 10
     DEFAULT_CELL_HEIGHT = 10
     DEFAULT_INIT_ALIVE_CELLS_NUM = 20
@@ -14,9 +17,10 @@ class GameOfLife():
     DEAD = '.'
 
     def __init__(self, width=None, height=None, init_alive_cells_num=None, game_turns=None, sleep_time=None):
+        super().__init__()
         config = configparser.ConfigParser()
         config.read('config.ini')
-        config_arr = config['DEFAULT']
+        config_arr = config['CONWAY']
         if 'Width' in config_arr:
             self.width = int(config_arr['Width'])
         else:
@@ -121,3 +125,7 @@ class GameOfLife():
             self.next_turn_grid()
             self.wait()
             turno += 1
+
+
+def main_conway():
+    GameOfLife(width=15, height=30, init_alive_cells_num=60, sleep_time=0.25, game_turns=20).init_game()
