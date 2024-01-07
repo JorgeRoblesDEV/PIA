@@ -215,7 +215,3 @@ class Player():
 
 def main_dungeon(configParser):
     MapGrid().game_init(configParser['DUNGEON'])
-
-
-if __name__ == "__main__":
-    main_dungeon()
