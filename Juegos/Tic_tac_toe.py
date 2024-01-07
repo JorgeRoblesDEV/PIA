@@ -1,6 +1,5 @@
 import random as rn
 import numpy as np
-import os
 
 from Game import Game
 
@@ -8,7 +7,10 @@ from Game import Game
 class TicTacToe(Game):
     def __init__(self):
         super().__init__()
+        self.tablero = None
+        self.current_player = None
         self.players = [' ', 'O', 'X']
+        self.game_reset()
 
     def print_tablero(self, tablero):
         print("+---+---+---+")
@@ -115,88 +117,92 @@ class TicTacToe(Game):
         print("###############################")
         print("")
 
-    def clear_display(self):
-        if os.name == 'posix':
-            os.system('clear')
-        elif os.name == 'nt':  # Windows
-            os.system('cls')
+    def game_init(self, config):
+        self.clear_screen()
+        self.output_title()
+        self.instructions()
+        self.game_reset()
 
-    def game(self):
-        seguir = True
+        while not self.game_is_finish():
+            self.game_print()
+            in_str = self.game_input()
+            self.game_turn(in_str)
 
-        while seguir:
-            self.clear_display()
-            self.output_title()
+        print(self.game_finish_msg())
+        self.game_print()
+        seguir = input("¿Otra partida? [Y/n]").upper()
+        while seguir not in ['Y', 'N']:
+            print("Ingresa una opción válida.")
+            seguir = input("¿Otra partida? [Y/n]").upper()
+        if seguir == 'Y':
+            self.game_reset()
 
-            self.instructions()
+    def game_input(self) -> str:
+        while True:
+            char = input("Introduce posición, jugador " + self.players[self.current_player] + "\n")
 
-            first_player_idx = 1 if rn.randint(0, 1) == 0 else -1
-            second_player_idx = 1 if first_player_idx == -1 else -1
-            print("First player: ", str(self.players[first_player_idx]))
-            print("Second player: ", str(self.players[second_player_idx]))
+            if not char:
+                self.game_print()
+                print("Por favor, ingresa una posición válida.")
+                continue
 
-            tablero = np.zeros((3, 3), dtype=int)
-            self.print_tablero(tablero)
+            try:
+                fil, col = self.numeric_2_position(int(char))
+            except ValueError:
+                self.game_print()
+                print("Valor inadecuado. Por favor, ingresa un número válido.")
+                continue
 
-            current_player = first_player_idx
+            if (fil == -1) or (col == -1):
+                self.game_print()
+                print("Valor inadecuado")
+                continue
 
-            while not self.is_full(tablero):
-                in_ok = False
-                scape = False
-                fil = -1
-                col = -1
+            if self.tablero[fil][col] != 0:
+                self.game_print()
+                print("Valor ya introducido")
+                continue
 
-                while not in_ok:
-                    char = input("Introduce posición, jugador " + self.players[current_player] + "\n")
+            break
 
-                    self.clear_display()
-                    self.output_title()
+        return char
 
-                    if not char:
-                        self.print_tablero(tablero)
-                        print("Por favor, ingresa una posición válida.")
-                        continue
+    def game_turn(self, in_str):
+        if in_str.isdigit():
+            fil, col = self.numeric_2_position(int(in_str))
+            if (fil != -1) and (col != -1) and self.tablero[fil][col] == 0:
+                self.tablero[fil][col] = self.current_player
+                self.current_player *= -1
 
-                    if char == 'C':
-                        print("Partida terminada por caracter de escape")
-                        scape = True
-                        break
+    def game_print(self):
+        self.clear_screen()
+        self.output_title()
+        self.instructions()
 
-                    try:
-                        fil, col = self.numeric_2_position(int(char))
-                    except ValueError:
-                        self.print_tablero(tablero)
-                        print("Valor inadecuado. Por favor, ingresa un número válido.")
-                        continue
+        self.print_tablero(self.tablero)
 
-                    if (fil == -1) & (col == -1):
-                        self.print_tablero(tablero)
-                        print("Valor inadecuado")
-                        continue
+    def game_is_finish(self) -> bool:
+        if self.has_won(self.tablero):
+            print("El jugador ", self.players[self.current_player * -1], " ha ganado")
+            return True
+        elif self.is_full(self.tablero):
+            print("EMPATE")
+            return True
+        return False
 
-                    if tablero[fil][col] != 0:
-                        self.print_tablero(tablero)
-                        print("Valor ya introducido")
-                        continue
+    def game_finish_msg(self) -> str:
+        return "Partida finalizada"
 
-                    in_ok = True
+    def game_reset(self):
+        self.current_player = 1
+        self.tablero = np.zeros((3, 3), dtype=int)
+        self.clear_and_print_board()
 
-                if scape:
-                    break
-
-                tablero[fil][col] = current_player
-                self.print_tablero(tablero)
-
-                if self.has_won(tablero):
-                    print("El jugador ", self.players[current_player], " ha ganado")
-                    seguir = True if input("Otra partida? [Y/n]").upper() == 'Y' else False
-                    break
-
-                current_player = current_player * -1
-            else:
-                print("EMPATE")
-                seguir = True if input("Otra partida? [Y/n]").upper() == 'Y' else False
-
+    def clear_and_print_board(self):
+        self.clear_screen()
+        self.output_title()
+        self.instructions()
+        self.print_tablero(self.tablero)
 
 def main_tictac():
-    TicTacToe().game()
+    TicTacToe().game_init(None)

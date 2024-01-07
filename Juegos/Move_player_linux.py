@@ -13,7 +13,7 @@ def move_player(self):
                 sys.exit()
             elif movement == 'r':
                 # Reiniciar el juego
-                self.reset_game()
+                self.game_reset()
             else:
                 self.clear_screen()
                 # Poner '.' a la ubicación del jugador antes de mover
@@ -28,7 +28,7 @@ def move_player(self):
                     # Preguntar si desea jugar otra partida
                     if self.play_again():
                         # Reiniciar el juego
-                        self.reset_game()
+                        self.game_reset()
                     else:
                         sys.exit()
 

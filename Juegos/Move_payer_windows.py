@@ -1,6 +1,4 @@
 import msvcrt
-import sys
-
 
 def move_player(self):
     while True:
@@ -9,10 +7,10 @@ def move_player(self):
                 movement = msvcrt.getch().decode().lower()
                 if movement == 'q':
                     print("\n\nGracias por haber jugado a Dungeon Crawl. Vuelve pronto.")
-                    sys.exit()
+                    break
                 elif movement == 'r':
                     # Reiniciar el juego
-                    self.reset_game()
+                    self.game_reset()
                 else:
                     self.clear_screen()
                     # Poner '.' a la ubicación del jugador antes de mover
@@ -27,9 +25,9 @@ def move_player(self):
                         # Preguntar si desea jugar otra partida
                         if self.play_again():
                             # Reiniciar el juego
-                            self.reset_game()
+                            self.game_reset()
                         else:
-                            sys.exit()
+                            break
         # La excepción salta cuando se introduce un caracter No utf-8
         except UnicodeDecodeError:
             print("", end="")

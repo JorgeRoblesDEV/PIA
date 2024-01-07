@@ -1,60 +1,27 @@
 import random
 import os
 import time
-
-import configparser
-
 from Game import Game
-
 
 class GameOfLife(Game):
     DEFAULT_CELL_WIDTH = 10
     DEFAULT_CELL_HEIGHT = 10
     DEFAULT_INIT_ALIVE_CELLS_NUM = 20
     DEFAULT_GAME_TURNS = 10
-    DEFAULT_SLEEP_TIME = 0.25
     ALIVE = '*'
     DEAD = '.'
 
-    def __init__(self, width=None, height=None, init_alive_cells_num=None, game_turns=None, sleep_time=None):
+    def __init__(self):
         super().__init__()
-        config = configparser.ConfigParser()
-        config.read('config.ini')
-        config_arr = config['CONWAY']
-        if 'Width' in config_arr:
-            self.width = int(config_arr['Width'])
-        else:
-            self.width = width or self.DEFAULT_CELL_WIDTH
-        if 'Height' in config_arr:
-            self.height = int(config_arr['Height'])
-        else:
-            self.height = height or self.DEFAULT_CELL_HEIGHT
-        if 'Init_alive_cells_num' in config_arr:
-            self.init_alive_cells_num = int(config_arr['Init_alive_cells_num'])
-        else:
-            self.init_alive_cells_num = init_alive_cells_num or self.DEFAULT_INIT_ALIVE_CELLS_NUM
-        if 'Game_turns' in config_arr:
-            self.game_turns = int(config_arr['Game_turns'])
-        else:
-            self.game_turns = game_turns or self.DEFAULT_GAME_TURNS
-
-        if 'Sleep_time' in config_arr:
-            self.sleep_time = float(config_arr['Sleep_time'])
-        else:
-            self.sleep_time = sleep_time or self.DEFAULT_SLEEP_TIME
 
         self.grid = []
-        self.llenar_con_celdas_muertas()
-        self.set_init_alive_cells()
+        self.current_turn = 1
 
     def clear(self):
         if os.name == 'nt':
             os.system('cls')
         else:
             os.system('clear')
-
-    def wait(self):
-        time.sleep(self.sleep_time)
 
     def llenar_con_celdas_muertas(self):
         for i in range(self.height):
@@ -114,18 +81,68 @@ class GameOfLife(Game):
 
         self.grid = next_grid
 
-    def init_game(self):
+    def game_init(self, config):
+        self.config = config
+        if 'Width' in self.config:
+            self.width = int(self.config['Width'])
+        else:
+            self.width = self.DEFAULT_CELL_WIDTH
+        if 'Height' in self.config:
+            self.height = int(self.config['Height'])
+        else:
+            self.height = self.DEFAULT_CELL_HEIGHT
+        if 'Init_alive_cells_num' in self.config:
+            self.init_alive_cells_num = int(self.config['Init_alive_cells_num'])
+        else:
+            self.init_alive_cells_num = self.DEFAULT_INIT_ALIVE_CELLS_NUM
+        if 'Game_turns' in self.config:
+            self.game_turns = int(self.config['Game_turns'])
+        else:
+            self.game_turns = self.DEFAULT_GAME_TURNS
+
+        self.llenar_con_celdas_muertas()
         self.set_init_alive_cells()
 
-        turno = 1
-        while turno <= self.game_turns:
-            self.clear()
-            print('Turno:' + str(turno))
-            self.draw_grid()
-            self.next_turn_grid()
-            self.wait()
-            turno += 1
+        while not self.game_is_finish():
+            self.game_print()
+            in_str = self.game_input()
+            self.game_turn(in_str)
 
+    def game_input(self) -> str:
+        return input("Enter para avanzar al siguiente turno (o 'q' para salir): ").lower()
 
-def main_conway():
-    GameOfLife(width=15, height=30, init_alive_cells_num=60, sleep_time=0.25, game_turns=20).init_game()
+    def game_turn(self, in_str):
+        if in_str == 'q':
+            print("Saliendo del juego.")
+            self.game_finish_msg()
+            exit()
+
+        self.clear()
+        print(f'Turno actual: {self.current_turn}')
+        self.draw_grid()
+        self.next_turn_grid()
+        self.current_turn += 1
+
+    def game_print(self):
+        self.clear()
+        print(f'Turno actual: {self.current_turn}')
+        self.draw_grid()
+
+    def game_reset(self):
+        self.clear()
+        self.grid = []
+        self.current_turn = 1
+        self.llenar_con_celdas_muertas()
+        self.set_init_alive_cells()
+
+    def game_is_finish(self) -> bool:
+        return self.current_turn > self.game_turns
+
+    def game_finish_msg(self) -> str:
+        return "Juego finalizado."
+
+def main_conway(configParser):
+    GameOfLife().game_init(configParser['CONWAY'])
+
+if __name__ == "__main__":
+    main_conway()

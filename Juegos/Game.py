@@ -1,8 +1,13 @@
+import os
+import configparser
+
 class Game:
     def __init__(self):
-        pass
+        self.configParser = configparser.ConfigParser()
+        self.configParser.read('config.ini')
 
     def menu(self):
+        self.clear_screen()
         try:
             while True:
                 print("\n" +
@@ -20,19 +25,26 @@ class Game:
                     main_tictac()
                 elif opt == "2":
                     from Dungeon_Crawl import main_dungeon
-                    main_dungeon()
+                    main_dungeon(self.configParser)
                 elif opt == "3":
                     from Conway import main_conway
-                    main_conway()
+                    main_conway(self.configParser)
                 elif opt == "4":
                     print("\nGracias por entretenerte con nosotros. ¡Hasta luego!")
                     break;
                 else:
+                    self.clear_screen()
                     print("El juego seleccionado no existe.")
         except EOFError:
             self.menu()
         except KeyboardInterrupt:
             self.menu()
+
+    def clear_screen(self):
+        if os.name == 'posix':
+            os.system('clear')
+        elif os.name == 'nt':  # Windows
+            os.system('cls')
 
     def game_init(self, config):
         pass
@@ -46,11 +58,11 @@ class Game:
     def game_print(self):
         pass
 
+    def game_reset(self):
+        pass
+
     def game_is_finish(self) -> bool:
         pass
 
     def game_finish_msg(self) -> str:
         pass
-
-    def clear_screen(self):
-        print('\n' * 100)
