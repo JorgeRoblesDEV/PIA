@@ -143,7 +143,7 @@ class MapGrid():
             move_player(self)
         # Linux
         elif os.name == 'posix':
-            from Move_player_linux import move_player
+            from ove_player_linux import move_player
             move_player(self)
         else:
             print("Sistema operativo no compatible")
